@@ -26,7 +26,8 @@ def read_input_file(filename):
         for i in range(num_characters):
             line = f.readline().strip()
             if line != '':
-                character, value = map(int, line.split())
+                character, value = line.split()
+                value = int(value)
                 character_values[character] = value
             else:
                 print("ERROR: Not enough characters provided.")
@@ -47,10 +48,50 @@ def read_input_file(filename):
     return character_values, a, b
 
 
+def max_val_substring(character_values, a, b):
+    """
+    Computes the maximum value substring
+    :param character_values: character value dict
+    :param a: substring a
+    :param b: substring b
+    :return: Maximum value substring
+    """
+    n = len(a)
+    m = len(b)
+
+    memory = [[0] * (m + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if a[i - 1] == b[j - 1]:
+                memory[i][j] = memory[i - 1][j - 1] + character_values[a[i - 1]]
+            else:
+                memory[i][j] = max(memory[i - 1][j], memory[i][j - 1])
+
+    i, j = n, m
+    result = []
+    while i > 0 and j > 0:
+        if a[i - 1] == b[j - 1]:
+            result.append(a[i - 1])
+            i -= 1
+            j -= 1
+        elif memory[i - 1][j] > memory[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+
+    result.reverse()
+
+    return memory[n][m], "".join(result)
+
+
 def main():
     # Input handling
     filename = input("Type the name of the txt file to use as input\n")
     character_values, a, b = read_input_file(filename)
+    value, substring = max_val_substring(character_values, a, b)
+    print(value)
+    print(substring)
 
 
 if __name__ == '__main__':
