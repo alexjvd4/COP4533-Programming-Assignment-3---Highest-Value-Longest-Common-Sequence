@@ -86,6 +86,12 @@ def max_val_substring(character_values, a, b):
 
     return memory[n][m], "".join(result)
 
+# output function 
+def write_output(value, subsequence):
+    with open("output.txt", "w") as f:
+        f.write(str(value) + "\n")
+        f.write(subsequence + "\n")
+
 
 def main():
     # Input handling
@@ -97,6 +103,8 @@ def main():
     # Output handling
     print(value)
     print(substring)
+
+    write_output(value, substring)
 
 
 if __name__ == '__main__':
