@@ -7,6 +7,8 @@ Main program main.py
 Alejandro Velez & Marco Fernandez
 """
 import sys
+import time
+import matplotlib.pyplot as plt
 
 
 def read_input_file(filename):
@@ -98,13 +100,37 @@ def main():
     filename = input("Type the name of the txt file to use as input\n")
     character_values, a, b = read_input_file(filename)
 
+    # Runtime clock
+    start = time.perf_counter()
     value, substring = max_val_substring(character_values, a, b)
+    end = time.perf_counter()
+
+    runtime_ms = (end - start) * 1000
 
     # Output handling
     print(value)
     print(substring)
 
     write_output(value, substring)
+
+    print("\nRuntime (ms):", runtime_ms)
+
+    # Question 1 Graph Calculation (for only input1.txt ... input10.txt)
+
+    # len(string a) * len(string b)
+    nm = [625, 900, 1225, 1600, 2025, 2500, 3600, 4900, 6400, 8100]
+    # Corresponding runtimes
+    T = [0.2716000000000385, 0.3689000000002274, 0.6675999999998794, 0.726199999999011, 0.811200000000234, 0.8929000000001963, 1.5366999999999464, 1.6791999999998808, 1.3974999999994964, 2.933199999999747]  # replace with your times
+
+    plt.scatter(nm, T, label="Measured runtime")
+    plt.plot(nm, T, linestyle='--', alpha=0.5)
+
+    plt.xlabel("n * m (problem size)")
+    plt.ylabel("Runtime (ms)")
+    plt.title("Runtime vs n*m for common subsequence DP")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':
